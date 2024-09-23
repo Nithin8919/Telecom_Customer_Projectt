@@ -27,8 +27,10 @@ class DataTransformation:
             logging.info('Data transformation is initiated')
             
             categorical_cols = ['gender','Partner','Dependents','PhoneService','OnlineSecurity','OnlineBackup','DeviceProtection',
-                                'TechSupport','StreamingTV','StreamingMovies','PaperlessBilling','Churn','MultipleLines',
-                                'InternetService','Contract','PaymentMethod']
+                                'TechSupport','StreamingTV','StreamingMovies','PaperlessBilling','Churn']
+            categorical_cols2 = np.array(['MultipleLines', 'InternetService', 'Contract', 'PaymentMethod']).reshape(-1,1)
+            
+            
             numerical_cols = ['MonthlyCharges','TotalCharges','tenure']
             
             logging.info('pipeline initiated')
@@ -41,9 +43,15 @@ class DataTransformation:
                 ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
                 ('label', LabelEncoder(handle_unknown='ignore'))])
             
+            cat_pipeline2 = Pipeline(steps=[
+                ('imputer',SimpleImputer(strategy="median")),
+                ('onehot', OneHotEncoder(handle_unknown="ignore"))
+            ])
+            
             preprocessor = ColumnTransformer([
                 ('num_pipeline',num_pipeline.numerical_cols),
-                ('cat_pipeline', cat_pipeline.categorical_cols) 
+                ('cat_pipeline', cat_pipeline.categorical_cols),
+                ('cat_pipeline2',cat_pipeline2.categorical_cols2) 
             ])
             
             return preprocessor
@@ -66,7 +74,33 @@ class DataTransformation:
                 target_column_name = 'Churn'
                 drop_columns = [target_column_name,'customerID']
                 
-                input_feature_train_df = 
-        
-            
+                input_feature_train_df = train_df.drop(columns= drop_columns,axis =1)
+                target_feature_train_df = train_df[target_column_name]
+                
+                input_feature_test_df = test_df.drop(columns = drop_columns, axis =1)
+                target_feature_test_df = test_df[target_column_name]
+                
+                input_feature_train_arr = preprocessor_obj.fit_transform(input_feature_train_df)
+                
+                input_feature_test_arr = preprocessor_obj.fit_transform(input_feature_test_df)
+                
+                logging.info("applying preprocessing object to the columns")
+                
+                train_arr = np.c_[input_feature_test_arr,np.array[input_feature_train_df]]        
+                
+                save_object(
+                    filepath = self.data_transformation_config.preprocessor_obj_file_path,
+                    obj = preprocessor_obj
+                )
+                
+                logging.info('preprocessed pickle file saved')
+                
+                return (
+                    train_arr,
+                    test_arr
+                )           
+                
+            except Exception as e:
+                logging.info("an exception has occured in the data transformation")
+                raise customexception(e,sys) 
             
