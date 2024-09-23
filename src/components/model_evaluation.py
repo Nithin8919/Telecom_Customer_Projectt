@@ -1,63 +1,56 @@
+import mlflow
 import os 
 import sys
-import pandas as pd
-import numpy as np
 from src.logger.logging import logging
 from src.exception.exception import customexception
-from src.utils import save_model, evaluate_model
+import mlflow.sklearn
+import pickle
+from urllib.parse import urlparse
+from sklearn.metrics import precision_score,f1_score,mean_absolute_error,mean_squared_error
+import numpy as np
+import airflow
 
-from sklearn.ensemble import RandomForestClassifier,VotingClassifier
-from sklearn.tree import DecisionTreeClassifier
-from dataclasses import dataclass
-from sklearn.svm import SVC
 
-@dataclass
-class ModelTrainerConfig:
-    trained_model_file_path = os.path.join('artifacts','model.pkl')
-    
-class ModelTranier:
+class ModelEvaluation:
     def __init__(self):
-        self.model_trainer_config = ModelTrainerConfig()
+        logging.info("Model evaluation started")
         
-    def initiate_model_training(self, train_array, test_array):
+    def eval_metrics(self,actual,pred):
+        rmse = np.sqrt(mean_squared_error(actual,pred))
+        mae = mean_absolute_error(actual,pred)
+        r2 = r2_score(actual,pred)
+        logging.info('evaluation metrics captured')
+        return rmse,mae,r2
+    
+    def initiate_model_evaluation(self,train_array, test_array):
         try:
-            logging.info('splitting dependent and independent features from the data')
+            X_test,y_test = test_array[:,:-1], test_array[:,-1]
             
-            X_train, y_train, X_test ,y_test = (
-                train_array[:,:-1],
-                train_array[:,-1],
-                test_array[:,:-1],
-                test_arry[:,-1]            
-            )
+            model_path = os.path.join("artifacts",'model.pkl')
+            model = load_object(model_path)
             
-            models = {
-                'DecisionTreeClassifier':DecisionTreeClassifier(),
-                'RandomForestClassifier':RandomForestClassifier(),
-                'svc':SVC(),
-            }
-            model_report:dict=evaluate_model(X_train,y_train,X_test,y_test,models)
-            print(model_report)
-            print('\n========================================================================')
-            logging.info(f"Model Report : {model_report}")
+            logging.info("model has regestered")
             
-            best_model_score = max(sorted(model_report.values()))
+            tracking_url_type_store = urlparse(mlflow.get_tracking_url()).scheme
             
-            best_model_name = list(model_report.keys())[
-                list(model_report.values()).index(best_max_score)
-            ]
+            print(tracking_url_type_store)
             
-            best_model = models(best_model_name)
-            
-            print(f'The best model found , Model found: {best_model_name}, R2_score: {best_model_score}')
-            print('\n==========================================================================')
-            logging.info(f"Best model found: {best_model_name}, Best model score:{best_model_score} ")
-            
-            save_object(
-                file_path = self.model_trainer_config.trained_model_file_path,
-                obj = best_model
-            )
-            
-            
+            with mlflow.start_run():
+                
+                prediction = model.predict(X_test)
+                
+                (rmse,mae,r2) = self.eval_metrics(y_test,prediction)
+                
+                mlflow.log_metric('rmse',rmse)
+                mlflow.log_metric('mae',mae)
+                mlflow.log_metric('r2',r2)
+                
+                if tracking_url_type_store!= "file":
+                    
+                    mlflow.sklearn.log_model(model, "model", regestered_model_name ="ml_model")
+                else:
+                    mlflow.sklearn.log_model(model, "model")
+                    
+                    
         except Exception as e:
-            logging.info("There is an exception occured in model_evaluation")
             raise customexception(e,sys)
