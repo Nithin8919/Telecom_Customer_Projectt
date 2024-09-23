@@ -12,7 +12,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 
-from src.utils import save_object
+from src.utils import save_object,load_object
 
 @dataclass
 class DataTransformationConfig:
