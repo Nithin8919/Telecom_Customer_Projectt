@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
 from imblearn.over_sampling import SMOTE
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -91,6 +91,11 @@ class DataTransformation:
             # Check for NaN values and fill with mean if necessary
             train_df[numerical_cols] = train_df[numerical_cols].fillna(train_df[numerical_cols].mean())
             test_df[numerical_cols] = test_df[numerical_cols].fillna(test_df[numerical_cols].mean())
+
+            # Encode the target variable (Churn) as 0 and 1 instead of using One-Hot Encoding.
+            label_encoder = LabelEncoder()
+            train_df['Churn'] = label_encoder.fit_transform(train_df['Churn'])  # Converts 'Yes'/'No' to 1/0
+            test_df['Churn'] = label_encoder.transform(test_df['Churn'])  # Use transform to avoid fitting again
 
             preprocessor_obj = self.get_data_transformation()
 
