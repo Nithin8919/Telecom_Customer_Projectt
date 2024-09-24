@@ -10,7 +10,7 @@ from sklearn.metrics import precision_score, f1_score, mean_absolute_error, mean
 import numpy as np
 
 # Assuming load_object is defined in your utils
-from src.utils import load_object,save_object
+from src.utils.utils import load_object,save_object
 
 class ModelEvaluation:
     def __init__(self):

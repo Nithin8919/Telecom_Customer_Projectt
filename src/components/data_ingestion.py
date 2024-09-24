@@ -25,6 +25,7 @@ class Data_Ingestion:
         try:
             # Read the data
             data = pd.read_csv(self.data_path)
+            data.columns = data.columns.str.strip()
             logging.info('Dataframe is read')
         
             # Create artifacts directory if it doesn't exist
@@ -35,6 +36,9 @@ class Data_Ingestion:
             # Perform train-test split
             logging.info("Performing train-test split")
             train_data, test_data = train_test_split(data, test_size=0.25)
+            train_data.columns = train_data.columns.str.strip()
+            test_data.columns = test_data.columns.str.strip()
+
             logging.info("Train-test split completed")
             
             # Save train and test datasets

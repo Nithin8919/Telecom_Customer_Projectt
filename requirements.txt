@@ -1,9 +1,9 @@
-pandas
-numpy
 matplotlib
+pandas==1.5.3  # or any latest version you are using
+numpy==1.23.5  # or any latest version you are using
+scikit-learn==1.2.0  # or any latest version you are using
+imbalanced-learn==0.9.0  # or any latest version you are using
 seaborn
-scikit-learn
 setuptools
-imblearn
 mlflow
 -e.

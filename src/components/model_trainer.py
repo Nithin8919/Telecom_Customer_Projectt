@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from src.logger.logging import logging
 from src.exception.exception import customexception
-from src.utils import save_object, evaluate_model,load_object  # Ensure these functions are defined
+from src.utils.utils import save_object, evaluate_model,load_object  # Ensure these functions are defined
 
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.tree import DecisionTreeClassifier

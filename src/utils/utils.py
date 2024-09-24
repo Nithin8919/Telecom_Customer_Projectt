@@ -10,19 +10,24 @@ from src.logger.logging import logging
 from src.exception.exception import customexception
 
 
+import os
+import pickle
+
 def save_object(path_file, obj):
+    """Saves an object to a specified file path."""
     try:
         dir_path = os.path.dirname(path_file)
         
-        os.makedirs(dir_path, exist_ok=True)  # Ensure the directory exists
+        # Ensure the directory exists
+        os.makedirs(dir_path, exist_ok=True)  
         
+        # Save the object to the specified file
         with open(path_file, 'wb') as file_obj:
             pickle.dump(obj, file_obj)
-            
-    except Exception as e:
-        logging.info("An exception occurred during saving the model object")
-        raise customexception(e, sys)
+        print(f"Object successfully saved to {path_file}")
 
+    except Exception as e:
+        print(f"Error occurred while saving the object: {str(e)}")
 
 def evaluate_model(X_train, y_train, X_test, y_test, models):
     try:
@@ -44,7 +49,7 @@ def evaluate_model(X_train, y_train, X_test, y_test, models):
 
 def load_object(file_path):
     try:
-        with open(file_path, 'rb') as file_obj:  # Corrected 'pile_path' to 'file_path'
+        with open(file_path, 'rb') as file_obj: 
             return pickle.load(file_obj)
     except Exception as e:
         logging.info("An exception occurred during loading the model object")
