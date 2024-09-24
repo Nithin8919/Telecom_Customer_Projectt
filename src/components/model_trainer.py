@@ -54,7 +54,7 @@ class ModelTrainer:
             
             # Save the best model using save_object
             save_object(
-                file_path=self.model_trainer_config.trained_model_file_path,
+                path_file=self.model_trainer_config.trained_model_file_path,
                 obj=best_model
             )
             
