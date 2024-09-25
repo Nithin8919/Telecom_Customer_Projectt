@@ -6,4 +6,5 @@ imbalanced-learn==0.9.0  # or any latest version you are using
 seaborn
 setuptools
 mlflow
+xgboost
 -e.

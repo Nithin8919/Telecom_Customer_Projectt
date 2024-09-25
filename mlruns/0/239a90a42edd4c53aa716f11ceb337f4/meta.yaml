@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/nitin/Documents/Telecom_Customer_Projectt/mlruns/0/239a90a42edd4c53aa716f11ceb337f4/artifacts
+end_time: 1727260677427
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 239a90a42edd4c53aa716f11ceb337f4
+run_name: persistent-horse-226
+run_uuid: 239a90a42edd4c53aa716f11ceb337f4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727260675684
+status: 3
+tags: []
+user_id: nitin
