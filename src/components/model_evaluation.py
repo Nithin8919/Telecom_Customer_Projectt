@@ -21,7 +21,9 @@ class ModelEvaluation:
         rmse = np.sqrt(mean_squared_error(actual, pred))
         mae = mean_absolute_error(actual, pred)
         r2 = r2_score(actual, pred)
-        logging.info('Evaluation metrics captured: RMSE: {}, MAE: {}, R2: {}'.format(rmse, mae, r2))
+        pres = precision_score(actual,pred)
+        f1 = f1_score(actual, pred)
+        logging.info('Evaluation metrics captured: RMSE: {}, MAE: {}, R2: {}, Precision: {}, f1 :{}'.format(rmse, mae, r2, pres, f1))
         return rmse, mae, r2
     
     def initiate_model_evaluation(self, train_array, test_array):
@@ -66,12 +68,15 @@ class ModelEvaluation:
             raise customexception(e, sys)
 
 # Example usage of ModelEvaluation class
-
+    
 if __name__ == "__main__":
     try:
+        train_path = os.path.join("artifacts", 'train_array.pkl')
+        train_arr = load_object(train_path)
+        test_path = os.path.join('artifacts','test_array.pkl')
         # Assuming train_arr and test_arr are defined elsewhere in your pipeline.
-        train_arr = ...  # Replace with actual training array
-        test_arr = ...   # Replace with actual testing array
+        # Replace with actual training array
+        test_arr = load_object(test_path)   # Replace with actual testing array
         
         model_eval_obj = ModelEvaluation()
         model_eval_obj.initiate_model_evaluation(train_arr, test_arr)

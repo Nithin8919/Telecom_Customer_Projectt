@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/nitin/Documents/Telecom_Customer_Projectt/mlruns/0/c53bcfa08c2540b1a686e58aff662836/artifacts
+end_time: 1727258576885
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c53bcfa08c2540b1a686e58aff662836
+run_name: peaceful-steed-258
+run_uuid: c53bcfa08c2540b1a686e58aff662836
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1727258574544
+status: 3
+tags: []
+user_id: nitin
